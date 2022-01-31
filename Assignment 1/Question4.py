@@ -57,7 +57,9 @@ def rational_exp(n):
             r = y*y
             norm_vals[i] = y * (((a3*r+a2)*r+a1)*r+a0)/((((b3*r+b2)*r+b1)*r+b0)*r+1)
         else:
-            r= 1-u
+            r = u
+            if y>0:
+                r= 1-u
             r = log(-log(r))
             norm_vals[i] = c0+r*(c1+r*(c2+r*(c3+r*(c4+r*(c5+r*(c6+r*(c7+r*c8)))))))
             if y< 0 :
@@ -71,48 +73,56 @@ def Acc_Rej(n):
     # Now simulate 2 uniform random variables and as per the algorithm.
     c = sqrt(2*exp(1)/pi)
     norm_vals = [0]*n
-    
+    # test_vals = [0]*n
+    # test_vals1 = [0]*n
+    # cnt_1=0
+    # cnt_2=0
+
     for i in range(0,n):
         flag = 0
         while flag == 0:
             # simulating exponential distribution - exp(1) and a uniform distribution
             # for Exponential we use the inverve method
-            # invesrse for exponential => x = -log(1-u)/1
+            # inverse for exp(1) => x = -log(1-u)/1
             u1 = uniform(0,1)
             y = -log(1-u1)
-
             # calculate f(y). Here we use (twice) the postive side of normal distribution to have the same domain as the exponential distribution.
             fy = exp(-(y.real**2)/2)*sqrt(2/pi)
+            
             #calculate g(y) 
-            gy = exp(-y.real) 
+            gy = exp(-y.real)     
 
             # simulate uniform to decide if within the normal distribution.
             u2 = uniform(0,1)
             temp = fy/(c*gy)
+            # cnt_1 = cnt_1 +1
             if u2 <= temp.real:
-                norm_vals[i] = y
+                # norm_vals[i] = y
                 flag = 1
-                u3 = uniform(0,1)
+                u3 = -1 if uniform(0,1)<0.5 else 1
                 # use symetry to assign postive and negative values. 
-                norm_vals[i] = norm_vals[i] * 1 if u3 <0.5 else -1
-    plt.hist(norm_vals, density=True)
+                norm_vals[i] = y * u3
+                # cnt_2 = cnt_2 +1
+                # test_vals[i] = exp(-(norm_vals[i]**2)/2)*sqrt(1/(2*pi))
+    # plt.hist(norm_vals, density=True)
+    # plt.plot(norm_vals,test_vals,'bo',marker = '.')
+
 
 
 
 # Box_Muller(1000)
 # Marsaglia_Bray(1000)
-# rational_exp(1000)
-Acc_Rej(100000)
+# rational_exp(100000)
+# Acc_Rej(10000)
 
-plt.show()
+BoxMuller_time = timeit("Box_Muller(100000000)",setup="from __main__ import Box_Muller", number = 100)
+Marsaglia_time = timeit("Marsaglia_Bray(100000000)",setup="from __main__ import Marsaglia_Bray", number = 100)
+Rational_time = timeit("rational_exp(100000000)",setup="from __main__ import rational_exp", number = 100)
+AccRej_time = timeit("Acc_Rej(100000000)",setup="from __main__ import Acc_Rej", number = 100)
 
-# BoxMuller_time = timeit("Box_Muller(1000)",setup="from __main__ import Box_Muller", number = 100)
-# Marsaglia_time = timeit("Marsaglia_Bray(1000)",setup="from __main__ import Marsaglia_Bray", number = 100)
-# Rational_time = timeit("rational_exp(1000)",setup="from __main__ import rational_exp", number = 100)
+print("Box Muller Method: ",BoxMuller_time)
+print("Marsaglia Method: ",Marsaglia_time)
+print("Rational Method: ",Rational_time)
+print("Acceptance Rejection Method: ",AccRej_time)
 
-# print(BoxMuller_time)
-# print(Marsaglia_time)
-# print(Rational_time)
-
-#plt.hist(norm_vals, density=True)
 #plt.show()
