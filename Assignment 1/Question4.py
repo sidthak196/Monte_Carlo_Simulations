@@ -12,7 +12,7 @@ def Box_Muller(n):
         u2 = uniform(0,1)
         norm_vals[i]= cos(2*pi*u2) * sqrt(-2*log(u1))
         norm_vals[i+1] = sin(2*pi*u2) * sqrt(-2*log(u1))
-    plt.hist(norm_vals, density=True)
+    # plt.hist(norm_vals, density=True)
 
 def Marsaglia_Bray(n):
 
@@ -26,7 +26,7 @@ def Marsaglia_Bray(n):
         if s < 1:
             norm_vals[i] = u1 * sqrt (-2 * log(s)/s)
             norm_vals[i+1] = u2 * sqrt (-2 * log(s)/s)
-    plt.hist(norm_vals, density=True)
+    # plt.hist(norm_vals, density=True)
 
 def rational_exp(n):
     a0 = 2.50662823884
@@ -64,7 +64,7 @@ def rational_exp(n):
             norm_vals[i] = c0+r*(c1+r*(c2+r*(c3+r*(c4+r*(c5+r*(c6+r*(c7+r*c8)))))))
             if y< 0 :
                 norm_vals[i] = - norm_vals[i]
-    plt.hist(norm_vals, density=True)
+    # plt.hist(norm_vals, density=True)
 
 def Acc_Rej(n):
     # Assuming the simpler function, g(x) as an exponention distribution with parameter 1.
@@ -115,14 +115,13 @@ def Acc_Rej(n):
 # rational_exp(100000)
 # Acc_Rej(10000)
 
-BoxMuller_time = timeit("Box_Muller(100000000)",setup="from __main__ import Box_Muller", number = 100)
-Marsaglia_time = timeit("Marsaglia_Bray(100000000)",setup="from __main__ import Marsaglia_Bray", number = 100)
-Rational_time = timeit("rational_exp(100000000)",setup="from __main__ import rational_exp", number = 100)
-AccRej_time = timeit("Acc_Rej(100000000)",setup="from __main__ import Acc_Rej", number = 100)
-
+BoxMuller_time = timeit("Box_Muller(100000000)",setup="from __main__ import Box_Muller", number = 1)
 print("Box Muller Method: ",BoxMuller_time)
+Marsaglia_time = timeit("Marsaglia_Bray(100000000)",setup="from __main__ import Marsaglia_Bray", number = 1)
 print("Marsaglia Method: ",Marsaglia_time)
+Rational_time = timeit("rational_exp(100000000)",setup="from __main__ import rational_exp", number = 1)
 print("Rational Method: ",Rational_time)
+AccRej_time = timeit("Acc_Rej(100000000)",setup="from __main__ import Acc_Rej", number = 1)
 print("Acceptance Rejection Method: ",AccRej_time)
 
 #plt.show()
