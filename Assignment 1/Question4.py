@@ -22,7 +22,7 @@ def Marsaglia_Bray(n):
         u1 = uniform(0,1) * -1 if v1 <0.5 else 1
         v2 = uniform(0,1)
         u2 = uniform(0,1)* -1 if v2 <0.5 else 1
-        s = u1 + u2
+        s = u1**2 + u2**2
         if s < 1:
             norm_vals[i] = u1 * sqrt (-2 * log(s)/s)
             norm_vals[i+1] = u2 * sqrt (-2 * log(s)/s)
